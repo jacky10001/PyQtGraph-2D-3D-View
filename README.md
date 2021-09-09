@@ -1,6 +1,6 @@
-# Python_3D_View
+# Using PyQt and PyQtGraph make 2D/3D View Form
 
-Here is 3D view implement on Python
+Here is 2D/3D data view implement on Python
 
 ## Related Package
 

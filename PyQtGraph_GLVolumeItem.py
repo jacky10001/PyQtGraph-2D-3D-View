@@ -13,10 +13,11 @@ import pyqtgraph.opengl as gl
 from pyqtgraph import functions as fn
 
 
-# data = scipy.io.loadmat("data\\Tomo.mat")["RI"]
+data = scipy.io.loadmat("Tomo.mat")["RI"]
+# data = scipy.io.loadmat("phantom.mat")["RI"]
 # data[data<1.38] = 0
 # np.save("data.npy", data)
-data = np.load("data.npy")
+# data = np.load("data.npy")
 print(data.max())
 print(data.min())
 data[data>1.41] = -data[data>1.41]

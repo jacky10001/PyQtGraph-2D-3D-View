@@ -24,7 +24,7 @@ def update():
 
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
-timer.start(500)
+timer.start(2500)
 
 if __name__ == '__main__':
     pg.exec()

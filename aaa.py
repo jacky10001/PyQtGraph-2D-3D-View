@@ -14,30 +14,46 @@ import pyqtgraph.opengl as gl
 from pyqtgraph import functions as fn
 
 
-# data = scipy.io.loadmat("Tomo.mat")["RI"]
-# data = scipy.io.loadmat("phantom.mat")["RI"]
-# data[data<1.38] = 0
-# np.save("data.npy", data)
-data = np.load("data.npy")
-print(data.max())
-print(data.min())
+# data = np.load("data.npy")
+data = np.zeros((444,444,444))
+data[...,:80] = 1.355
+data[...,80:200] = 1.365
+data[...,200:] = 1.375
+# print(data.max())
+# print(data.min())
 
-data[data<1.37] = 0
-# data[(data<1.39) & (data>=1.37)] = 128
-# data[data>=1.39] = 255
+d2 = np.empty(data.shape + (4,), dtype=np.ubyte)
+r = np.zeros(data.shape + (4,), dtype=np.ubyte)
+r[..., 0] = 255
+r[..., 3] = 2
+g = np.zeros(data.shape + (4,), dtype=np.ubyte)
+g[..., 1] = 255
+g[..., 3] = 2
+b = np.zeros(data.shape + (4,), dtype=np.ubyte)
+b[..., 2] = 255
+b[..., 3] = 2
+
+t1 = time.time()
+# data[data<1.35] = 0
+data[(data<1.36) & (data>=1.35)] = 64
+data[(data<1.37) & (data>=1.36)] = 128
+data[(data<1.38) & (data>=1.37)] = 255
+
+y, x, z = np.where(data==64)
+d2[y, x , z, :] = r[y, x , z, :]
+
+y, x, z = np.where(data==128)
+d2[y, x , z, :] = g[y, x , z, :]
+
+y, x, z = np.where(data==255)
+d2[y, x , z, :] = b[y, x , z, :]
+
+print("time:", time.time() - t1)
 
 app = pg.mkQApp("GLVolumeItem Example")
 w = gl.GLViewWidget()
 w.opts['distance'] = 800
 w.setWindowTitle('pyqtgraph example: GLVolumeItem')
-
-d2 = np.empty(data.shape + (4,), dtype=np.ubyte)
-d2[..., 0] = data
-d2[d2>=1.37] = np.array([255,255,255,128])
-d2[..., 1] = d2[..., 0]
-d2[..., 2] = d2[..., 0]
-# d2[..., 3] = d2[..., 0]*0.2
-d2[..., 3] = (d2[..., 3].astype(float) / 255.) **2 * 255
 
 v = gl.GLVolumeItem(d2)
 v.translate(-50,-50,-100)
